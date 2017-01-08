@@ -4,17 +4,19 @@ from .config import DevConfig
 from .models import db
 from .controllers.blog import blog_blueprint
 
-app = Flask(__name__)
-app.config.from_object(DevConfig)
+def create_app(object_name):
+    app = Flask(__name__)
+    app.config.from_object(object_name)
 
-db.init_app(app)
+    db.init_app(app)
 
-@app.route('/')
-def index():
-    print("here")
-    return redirect(url_for('blog.home'))
+    @app.route('/')
+    def index():
+        return redirect(url_for('blog.home'))
 
-app.register_blueprint(blog_blueprint)
+    app.register_blueprint(blog_blueprint)
+
+    return app
 
 if __name__ == "__main__":
-    app.run(host='192.168.17.129')
+    app = create_app()
