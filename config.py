@@ -5,5 +5,8 @@ class ProdConfig(Config):
     pass
 
 class DevConfig(Config):
-    DEBUG = True
+    debug = True
+    SECRET_KEY = 'f83b0f4783562f0b8d4b27232e1abdec'
+    SQLALCHEMY_ECHO = False
+    SQLALCHEMY_DATABASE_URI = "sqlite:///database.db"
 
