@@ -1,12 +1,13 @@
 from flask_script import Manager, Server
 from flask_migrate import Migrate, MigrateCommand
 
-from main import app, db, User, Post, Tag, Comment
+from webapp import app
+from webapp.models import db, User, Post, Tag, Comment
 
 migrate = Migrate(app, db)
 
 manager = Manager(app)
-manager.add_command("server", Server())
+manager.add_command("server", Server(host='192.168.17.129'))
 manager.add_command("db", MigrateCommand)
 
 @manager.shell
