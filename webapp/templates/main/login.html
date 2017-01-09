@@ -1,0 +1,6 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+{% block body %}
+{{ gen_form(form, url_for('.login')) }}
+{% endblock %}

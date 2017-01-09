@@ -3,6 +3,7 @@ from .config import DevConfig
 
 from .models import db
 from .controllers.blog import blog_blueprint
+from .controllers.main import main_blueprint
 
 def create_app(object_name):
     app = Flask(__name__)
@@ -15,6 +16,7 @@ def create_app(object_name):
         return redirect(url_for('blog.home'))
 
     app.register_blueprint(blog_blueprint)
+    app.register_blueprint(main_blueprint)
 
     return app
 

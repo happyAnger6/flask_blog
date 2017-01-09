@@ -15,6 +15,17 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <p>发表于<a href="{{ url_for('.user', username=post.user.username)
+            }}">{{ post.user.username }} </a> on {{ post.publish_date }}</p>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <a href="{{ url_for('.edit_post', id=post.id) }}" class="btn btn-primary">编辑</a>
+            </div>
+        </div>
+    </div>
     <div class="col-lg-12">
     <h3>New Comment:</h3>
     <form method="POST" action="{{ url_for('.post', post_id=post.id)
