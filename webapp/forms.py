@@ -22,6 +22,7 @@ class LoginForm(Form):
         DataRequired(), Length(max=255)
     ])
     password = PasswordField('Password', [DataRequired()])
+    remember = BooleanField('Remember Me')
 
     def validate(self):
         check_validate = super(LoginForm, self).validate()

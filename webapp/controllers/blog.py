@@ -2,9 +2,12 @@ import datetime
 from os import path
 from sqlalchemy import func
 from flask import render_template, Blueprint, redirect, url_for
+from flask_login import login_required, current_user
+from flask_principal import Permission, UserNeed
 
 from webapp.models import db, Post, Tag, Comment, User, tags
 from webapp.forms import CommentForm, PostForm
+from webapp.extensions import poster_permission, admin_permission
 
 blog_blueprint = Blueprint(
     'blog',
@@ -92,6 +95,7 @@ def user(username):
     )
 
 @blog_blueprint.route('/new', methods=['GET', 'POST'])
+@login_required
 def new_post():
     form = PostForm()
 
@@ -99,26 +103,35 @@ def new_post():
         new_post = Post(form.title.data)
         new_post.text = form.text.data
         new_post.publish_date = datetime.datetime.now()
+        new_post.user_id = current_user.id
 
+        User.query.filter_by(id=current_user.id).update({
+            'roles':['poster']
+        })
         db.session.add(new_post)
         db.session.commit()
 
     return render_template('new.html', form=form)
 
 @blog_blueprint.route('/edit/<int:id>', methods=['GET', 'POST'])
+@login_required
+#@poster_permission.require(http_exception=403)
 def edit_post(id):
     post = Post.query.get_or_404(id)
-    form = PostForm()
+    permission = Permission(UserNeed(post.user_id))
 
-    if form.validate_on_submit():
-        post.title = form.title.data
-        post.text = form.text.data
-        post.publish_date = datetime.datetime.now()
+    if(permission.can() or admin_permission.can()):
+        form = PostForm()
 
-        db.session.add(post)
-        db.session.commit()
+        if form.validate_on_submit():
+            post.title = form.title.data
+            post.text = form.text.data
+            post.publish_date = datetime.datetime.now()
 
-        return redirect(url_for('.post', post_id=post.id))
+            db.session.add(post)
+            db.session.commit()
 
-    form.text.data = post.text
-    return render_template('edit.html', form=form, post=post)
+            return redirect(url_for('.post', post_id=post.id))
+
+        form.text.data = post.text
+        return render_template('edit.html', form=form, post=post)
