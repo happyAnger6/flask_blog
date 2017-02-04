@@ -3,8 +3,7 @@ from wtforms import (
     StringField,
     TextAreaField,
     PasswordField,
-    BooleanField,
-    SelectField
+    BooleanField
 )
 
 from wtforms.validators import DataRequired, Length, EqualTo, URL
@@ -86,13 +85,4 @@ class PostForm(Form):
         DataRequired(),
         Length(max=255)
     ])
-    type = SelectField('Post Type', choices=[
-        ('blog', 'Blog Post'),
-        ('image', 'Image'),
-        ('video', 'Vidoe'),
-        ('quote', 'Quote')
-    ])
-    text = TextAreaField('Content')
-    image = StringField('Image URL', [URL(), Length(max=255)])
-    video = StringField('Video Code', [Length(max=255)])
-    author = StringField('Author', [Length(max=255)])
+    text = TextAreaField('Content', [DataRequired()])

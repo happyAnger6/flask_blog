@@ -14,4 +14,9 @@ class DevConfig(Config):
         path.pardir,
         'database.db'
     )
+    MONGODB_SETTINGS = {
+        'db': 'local',
+        'host': 'localhost',
+        'port': 27017
+    }
 
