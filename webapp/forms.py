@@ -31,7 +31,7 @@ class LoginForm(Form):
         if not check_validate:
             return False
 
-        user = User.query.filter_by(
+        user = User.objects(
             username = self.username.data
         ).first()
         if not user:
@@ -69,7 +69,7 @@ class RegisterForm(Form):
         if not check_validate:
             return False
 
-        user = User.query.filter_by(
+        user = User.objects(
             username = self.username.data
         ).first()
 
@@ -86,13 +86,4 @@ class PostForm(Form):
         DataRequired(),
         Length(max=255)
     ])
-    type = SelectField('Post Type', choices=[
-        ('blog', 'Blog Post'),
-        ('image', 'Image'),
-        ('video', 'Vidoe'),
-        ('quote', 'Quote')
-    ])
     text = TextAreaField('Content')
-    image = StringField('Image URL', [URL(), Length(max=255)])
-    video = StringField('Video Code', [Length(max=255)])
-    author = StringField('Author', [Length(max=255)])

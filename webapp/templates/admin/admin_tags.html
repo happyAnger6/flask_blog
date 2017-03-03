@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+{% extends "admin_base.html" %}
+{% block title %}Home{% endblock %}
+{% block body %}
+<div class="content pull-left">
+    <form>
+  <div class="form-group">
+    <label for="labelTtile">标签名称</label>
+    <input type="text" class="form-control" id="labelTtile" placeholder="标签">
+  </div>
+        <div class="form-group">
+    <label for="labelAlias">别  名</label>
+    <input type="text" class="form-control" id="labelAlias" placeholder="别名">
+  </div>
+  <div class="form-group">
+    <label for="fatherLable">父 标签</label>
+    <input type="text" class="form-control" id="fatherLable" placeholder="父标签">
+  </div>
+  <button type="submit" class="btn btn-default">添 加</button>
+</form>
+</div>
+{% endblock %}

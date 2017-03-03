@@ -19,4 +19,4 @@ default_permission = Permission(RoleNeed('default'))
 @login_manager.user_loader
 def load_user(userid):
     from .models import User
-    return User.query.get(userid)
+    return User.objects(id=userid).first()

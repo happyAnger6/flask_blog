@@ -18,7 +18,7 @@ main_blueprint = Blueprint(
 
 @main_blueprint.route('/')
 def home():
-    return redirect(url_for('blog.name'))
+    return redirect(url_for('blog.home'))
 
 
 @main_blueprint.route('/login', methods=['GET', 'POST'])
@@ -26,11 +26,11 @@ def login():
     form = LoginForm()
 
     if form.validate_on_submit():
-        user = User.query.filter_by(
+        user = User.objects(
             username = form.username.data
-        ).one()
-        login_user(user, remember=form.remember.data)
+        ).first()
 
+        login_user(user, remember=form.remember.data)
         identity_changed.send(
             current_app._get_current_object(),
             identity=Identity(user.id)
@@ -56,10 +56,10 @@ def register():
     form = RegisterForm()
 
     if form.validate_on_submit():
-        new_user = User(form.username.data)
+        new_user = User()
+        new_user.username = form.username.data
         new_user.set_password(form.password.data)
-        db.session.add(new_user)
-        db.session.commit()
+        new_user.save()
 
         flash("Your user has been created, please login.",
               category="success")

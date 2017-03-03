@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% macro render_pagination(pagination, endpoint) %}
+    <nav>
+        <ul class="pagination">
+            <li>
+                <a href="{{ url_for('.home', page=pagination.prev().page) }}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            {% for page in pagination.iter_pages() %}
+             {% if page %}
+                 {% if page != pagination.page %}
+                    <li>
+                        <a href="{{ url_for(endpoint, page=page) }}">
+                            {{ page }}
+                        </a>
+                    </li>
+                 {% else %}
+                    <li><a href="">{{ page }}</a></li>
+                 {% endif %}
+             {% else %}
+                <li><a>...</a></li>
+             {% endif %}
+            {% endfor %}
+            <li>
+                <a href="{{ url_for('.home', page=pagination.next().page) }}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    {% endmacro %}
+    {% macro gen_form(form, path) %}
+    <div class="col-lg-12">
+        <form method="POST" action="{{ path
+    }}">
+        {{ form.hidden_tag() }}
+        {% for field in form %}
+        {% if field.type != "CSRFTokenField" %}
+        <div class="form-group">
+            {{ field.label }}
+            {% if field.errors %}
+                {% for e in field.errors %}
+                <p class="help-block">{{ e }}</p>
+                {% endfor %}
+            {% endif %}
+            {{ field(class_='form-control') }}
+        </div>
+            {% endif %}
+        {% endfor %}
+        <input class="btn btn-primary" type="submit" value="Submit">
+        </form>
+    </div>
+    {% endmacro %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-COMPATIBLE" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title%}Blog{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+</head>
+<body>
+<div class="container">
+    <div class="jumbotron">
+        <h1><a href="{{ url_for('blog.home') }}">张晓安的个人博客</a></h1>
+        <p>管理页面!</p>
+    </div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                {{ message }}
+            </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+  <aside class="col-md-4 sidebar">
+    <div class="widget">
+      <div class="content community">
+        <p><a href="{{ url_for('.tags') }}">标签分类</a></p>
+      </div>
+    </div>
+  </aside>
+    {% block body %}
+    {% endblock %}
+</div>
+<script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+{% block js %}
+{% endblock %}
+</body>
+</html>

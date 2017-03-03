@@ -16,7 +16,7 @@ class DevConfig(Config):
     )
     MONGODB_SETTINGS = {
         'db': 'local',
-        'host': 'localhost',
+        'host': '192.168.17.129',
         'port': 27017
     }
 
